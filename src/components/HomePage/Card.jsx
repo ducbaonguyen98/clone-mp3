@@ -5,7 +5,7 @@ import { remove_unicode } from "../../helpers/index";
 
 export default function Card({ encodeId, title, link, artists, thumbnail }) {
   return (
-    <div className="rounded-2xl shadow w-40 shrink-0">
+    <div className="rounded-2xl shadow w-36 shrink-0">
       <Link to={`/song/${remove_unicode(title)}-${encodeId}`}>
         <div className="relative">
           <img
@@ -19,7 +19,7 @@ export default function Card({ encodeId, title, link, artists, thumbnail }) {
         </div>
         <div className="p-3 space-y-2">
           <h3 className="text-base font-semibold line-clamp-1">{title}</h3>
-          <span className="text-neutral-400 text-sm line-clamp-2">
+          <span className="text-neutral-400 text-xs line-clamp-2">
             {artists.map((item, index) => item.name).join(", ")}
           </span>
         </div>
