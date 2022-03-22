@@ -8,8 +8,6 @@ function Home() {
 
   if (!data) return <>loading...</>;
 
-  console.log(data);
-
   return (
     <div className="max-w-md m-auto p-3 space-y-10">
       <Header />

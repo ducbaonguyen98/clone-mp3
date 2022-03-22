@@ -15,36 +15,33 @@ const formatTimer = (number) => {
 export default function PlaySong() {
   const navigate = useNavigate();
   const { slug } = useParams();
-  const encodeId = slug.split("-").pop();
+  const encodeId = slug.split("-").pop(); 
   const { data } = useSong(encodeId);
 
   const [valueRange, setValueRange] = useState(0);
   const [active, setActive] = useState(true);
-  const [duration, setDuration] = useState(0);
+  const [duration, setDuration] = useState(0); 
 
   const audioRef = useRef(null);
   const timeInterval = useRef(null);
 
   const { list } = useContext(ListSongContext);
 
-  useEffect(() => { 
-    setActive(true);
-    setValueRange(0);
-    setDuration(0); 
-  },[encodeId])
+  const indexSong = useMemo(() => {
+    if(!list) return 0;
+    return list.findIndex(item => item.encodeId === encodeId);
+  },[encodeId, list]); 
 
   useEffect(() => {
-    if (!active) return;
+    if (!active) return; 
 
-    if(!audioRef) return;
-
-    if(!audioRef.current) return;
-
+    if (duration === 0) return;
+     
     timeInterval.current = setInterval(() => {
-      setValueRange((value) => {
-        if (value >= Math.floor(audioRef.current.duration)) {
+      setValueRange((value) => { 
+        if (value >= duration) {
           clearInterval(timeInterval.current);
-          setActive(false);
+          setActive(false);  
           return value;
         }
         return ++value;
@@ -52,12 +49,7 @@ export default function PlaySong() {
     }, 1000);
 
     return () => clearInterval(timeInterval.current);
-  }, [active]);
-
-  const indexSong = useMemo(() => {
-    if(!list) return 0;
-    return list.findIndex(item => item.encodeId === encodeId);
-  },[encodeId, list]); 
+  }, [active, duration]);
 
   if (!data) return <>Loading...</>;
 
@@ -122,11 +114,18 @@ export default function PlaySong() {
           />
           <audio autoPlay
             ref={audioRef}
-            onLoadedData={() => setDuration(audioRef.current.duration)}
+            onLoadedData={() => {
+              setActive(true);
+              setValueRange(0);
+              setDuration(audioRef.current.duration); 
+            }}
             src={streaming.default["128"]}
           />
         </div>
         <div className="flex justify-between items-center">
+          <div className=""> 
+            <i className="fas fa-random text-xl text-neutral-500"></i>
+          </div>
           <div onClick={handlepPeviousSong} className="cursor-pointer bg-[#E4E6F1] text-[#3D58FF] h-10 w-10 rounded-full flex justify-center items-center text-xl">
             <i className="fas fa-caret-left"></i>
             <i className="fas fa-caret-left"></i>
@@ -141,6 +140,9 @@ export default function PlaySong() {
           <div onClick={handleNextSong} className="cursor-pointer bg-[#E4E6F1] text-[#3D58FF] h-10 w-10 rounded-full flex justify-center items-center text-xl">
             <i className="fas fa-caret-right"></i>
             <i className="fas fa-caret-right"></i>
+          </div>
+          <div className="">
+            <i className="fas fa-repeat text-xl text-neutral-500"></i>
           </div>
         </div>
       </div>
