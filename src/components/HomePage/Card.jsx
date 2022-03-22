@@ -1,18 +1,29 @@
-import React from 'react'
+import React from "react";
+import { Link } from "react-router-dom";
+import { remove_unicode } from "../../helpers/index";
 
-export default function Card() {
+
+export default function Card({ encodeId, title, link, artists, thumbnail }) {
   return (
-    <div className="rounded-2xl shadow w-fit shrink-0">
+    <div className="rounded-2xl shadow w-40 shrink-0">
+      <Link to={`/song/${remove_unicode(title)}-${encodeId}`}>
         <div className="relative">
-            <img src="https://picsum.photos/200/300" alt="music" className="w-36 h-24 rounded-tl-2xl rounded-tr-2xl" /> 
-            <span className="w-8 h-8 flex justify-center items-center rounded-full bg-neutral-300 absolute left-1/2 -translate-x-1/2  top-1/2 -translate-y-1/2">
-                <i className="fas fa-play text-xs"></i>
-            </span>
+          <img
+            src={thumbnail}
+            alt={title}
+            className="w-full h-32 rounded-tl-2xl rounded-tr-2xl"
+          />
+          <span className="w-8 h-8 flex justify-center items-center rounded-full bg-neutral-300 absolute left-1/2 -translate-x-1/2  top-1/2 -translate-y-1/2">
+            <i className="fas fa-play text-xs"></i>
+          </span>
         </div>
-        <div className="px-3 py-1">
-            <h3 className="text-base">Always happy</h3>
-            <span className="text-neutral-400 text-sm">5 min</span>
+        <div className="p-3 space-y-2">
+          <h3 className="text-base font-semibold line-clamp-1">{title}</h3>
+          <span className="text-neutral-400 text-sm line-clamp-2">
+            {artists.map((item, index) => item.name).join(", ")}
+          </span>
         </div>
+      </Link>
     </div>
-  )
+  );
 }
