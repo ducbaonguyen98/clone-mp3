@@ -36,6 +36,10 @@ export default function PlaySong() {
   useEffect(() => {
     if (!active) return;
 
+    if(!audioRef) return;
+
+    if(!audioRef.current) return;
+
     timeInterval.current = setInterval(() => {
       setValueRange((value) => {
         if (value >= Math.floor(audioRef.current.duration)) {
