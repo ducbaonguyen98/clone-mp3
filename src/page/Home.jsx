@@ -1,17 +1,15 @@
-import React from "react";
-import Header from "../components/Header";
+import React from "react"; 
 import CardSection from "../components/HomePage/CardSection";
+import Loading from "../components/Loading";
 import { useTop100 } from "../hooks/api";
 
-function Home() {
-  console.log("HomePapge render")
+function Home() { 
   const { data } = useTop100();
-
-  if (!data) return <>loading...</>;
+  
+  if (!data) return <Loading />;
 
   return (
-    <div className="space-y-10">
-      <Header />
+    <div className="space-y-10"> 
       <div className="space-y-5">
         {data.data.map((item, index) => (
           <CardSection

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { CurrentSongContext } from "../../contexts/CurrentSongContext";
@@ -31,12 +31,10 @@ const InputSlider = ({ duration, valueRange, handleOnChange }) => {
   );
 }; 
 
-export default function SectionPlaySong({ encodeId, data, streaming }) {
-  const navigate = useNavigate(); 
+export default function SectionPlaySong({ encodeId, data }) {
+  const navigate = useNavigate();  
 
-  const [active, setActive] = useState(true); 
-
-  const { audioRef, dataPlaySong, setDataPlaySong, handleNextAndPreviousSong, handleEnded} = useContext(PlaySongContext); 
+  const { audioRef, dataPlaySong, setDataPlaySong, handlePlayAndPauseSong, handleNextAndPreviousSong, handleEnded} = useContext(PlaySongContext); 
   const { currentSong, setCurrentSong } = useContext(CurrentSongContext);
 
   useEffect(() => { 
@@ -56,19 +54,7 @@ export default function SectionPlaySong({ encodeId, data, streaming }) {
 
     if(encodeId !== currentSong.id)
       setCurrentSong(data);
-  },[encodeId, data, currentSong, setCurrentSong]) 
-
-  const handleClick = () => {
-    setActive((pre) => {
-      if (pre) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play();
-      }
-
-      return !pre;
-    });
-  };
+  },[encodeId, data, currentSong, setCurrentSong])  
 
   const handleOnChange = (e) => {
     const value = e.target.value;
@@ -116,10 +102,10 @@ export default function SectionPlaySong({ encodeId, data, streaming }) {
           <i className="fas fa-caret-left"></i>
         </div>
         <div className="bg-[#3D58FF] h-14 w-14 rounded-full text-2xl text-white flex justify-center items-center cursor-pointer">
-          {active ? (
-            <i onClick={handleClick} className="fas fa-pause"></i>
+          {dataPlaySong.isPlay ? (
+            <i onClick={() => handlePlayAndPauseSong()} className="fas fa-pause"></i>
           ) : (
-            <i onClick={handleClick} className="fas fa-play"></i>
+            <i onClick={() => handlePlayAndPauseSong()} className="fas fa-play"></i>
           )}
         </div>
         <div

@@ -5,12 +5,12 @@ const SectionSongInfo = ({ thumbnail, title, artists_names, like, listen, commen
 
   return (
     <div className="space-y-3">
-      <div className="animate-[spin_30s_linear_infinite]">
-        <img
-          src={thumbnail}
-          alt="music"
-          className="z-10 w-80 h-80 m-auto rounded-full"
-        />
+      <div className="w-64 h-64 m-auto animate-[spin_30s_linear_infinite]">
+          <img
+            src={thumbnail}
+            alt="music"
+            className="z-10 w-full h-full rounded-full"
+          />
       </div>
       <div className="text-center space-y-2">
         <h3 className="text-2xl font-semibold">{title}</h3>

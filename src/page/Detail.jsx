@@ -5,23 +5,24 @@ import Header from "../components/DetailPage/Header";
 import SectionListSong from "../components/DetailPage/SectionListSong";
 import SectionArtist from "../components/DetailPage/SectionArtist";
 import { ListSongContext } from "../contexts/ListSongContext";
+import Loading from "../components/Loading"
 
-export default function Detail() {
-  console.log("Detail render")
-
+export default function Detail() { 
   const { slug } = useParams();
-  const { data } = useListSong(slug.split("-").pop());
+  const { data } = useListSong(slug.split("-").pop()); 
 
   const [ limit, setLimit ] = useState(10); 
-  const { setListSong } = useContext(ListSongContext); 
+  const { setListSong, setPathListSong } = useContext(ListSongContext); 
     
 
   useEffect(() => {
-    if(data)  
+    if(data)  {
       setListSong(data.data.song.items);
-  },[data, setListSong]);
+      setPathListSong(`/song/${slug}`);
+    }
+  },[data, setListSong, slug, setPathListSong]);
 
-  if (!data) return <>Loading...</>; 
+  if (!data) return <Loading/>; 
 
  
   const {
@@ -37,7 +38,7 @@ export default function Detail() {
 
 
   return (
-    <div className="space-y-5 brightness-125">
+    <div className="space-y-5">
       <Header thumbnail={thumbnailM || thumbnail_medium || thumbnail} title={title} badge={genres[0].title} description={sortDescription} />
       <SectionListSong data={song.items.slice(0, limit)}/>
       <div className="text-center">

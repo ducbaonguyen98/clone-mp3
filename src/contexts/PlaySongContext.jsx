@@ -5,6 +5,7 @@ import { ListSongContext } from "./ListSongContext";
 export const PlaySongContext = createContext();
 
 const obj = {
+  isPlay: false,
   valueRange: 0,
   duration: 0, 
   repeat: 0,
@@ -25,6 +26,8 @@ const PlaySongContextProvider = ({ children }) => {
     return listSong.findIndex((item) => item.encodeId === currentSong.id);
   }, [listSong, currentSong]);
 
+  if(currentSong && currentSong.streaming.msg !== "Success") return <>{currentSong.streaming.msg}</>
+
 
   const handleNextAndPreviousSong = (type, callback) => {
     const index = dataPlaySong.isRandom ? Math.floor(Math.random() * 100) : type === "next" ? indexSong + 1 : indexSong - 1;
@@ -33,11 +36,23 @@ const PlaySongContextProvider = ({ children }) => {
   }; 
 
   const handleLoadedData = () => {   
-    setDataPlaySong((pre) => ({ ...pre, valueRange: 0, duration: Number(audioRef.current.duration) }))
+    setDataPlaySong((pre) => ({ ...pre, valueRange: 0, duration: Number(audioRef.current.duration), isPlay: true }))
   };
 
-  const handlePlaySong = () => {
-    audioRef.current.play();
+  const handlePlayAndPauseSong = () => {
+    setDataPlaySong((pre) => {
+      const temp = { ...pre };
+
+      if(temp.isPlay) {
+        audioRef.current.pause();
+        temp.isPlay = false;
+      } else {
+        audioRef.current.play();
+        temp.isPlay = true;
+      } 
+
+      return temp;
+    }) 
   }; 
 
   const handleTimeUpdate = () => { 
@@ -56,7 +71,7 @@ const PlaySongContextProvider = ({ children }) => {
   };
 
   return ( 
-    <PlaySongContext.Provider value={{ audioRef, dataPlaySong, setDataPlaySong, handlePlaySong, handleNextAndPreviousSong, handleEnded }}>
+    <PlaySongContext.Provider value={{ audioRef, dataPlaySong, setDataPlaySong, handlePlayAndPauseSong, handleNextAndPreviousSong, handleEnded }}>
       {children}
       {
         currentSong && <audio
