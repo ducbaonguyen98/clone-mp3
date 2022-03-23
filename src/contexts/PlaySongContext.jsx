@@ -24,10 +24,7 @@ const PlaySongContextProvider = ({ children }) => {
   const indexSong = useMemo(() => {
     if (!listSong || !currentSong) return 0;
     return listSong.findIndex((item) => item.encodeId === currentSong.id);
-  }, [listSong, currentSong]);
-
-  if(currentSong && currentSong.streaming.msg !== "Success") return <>{currentSong.streaming.msg}</>
-
+  }, [listSong, currentSong]); 
 
   const handleNextAndPreviousSong = (type, callback) => {
     const index = dataPlaySong.isRandom ? Math.floor(Math.random() * 100) : type === "next" ? indexSong + 1 : indexSong - 1;
@@ -74,7 +71,7 @@ const PlaySongContextProvider = ({ children }) => {
     <PlaySongContext.Provider value={{ audioRef, dataPlaySong, setDataPlaySong, handlePlayAndPauseSong, handleNextAndPreviousSong, handleEnded }}>
       {children}
       {
-        currentSong && <audio
+        currentSong && currentSong.streaming.msg === "Success" && <audio
         autoPlay
         ref={audioRef}
         src={currentSong.streaming["default"]["128"]}

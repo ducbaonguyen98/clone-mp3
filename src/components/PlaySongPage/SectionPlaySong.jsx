@@ -31,7 +31,8 @@ const InputSlider = ({ duration, valueRange, handleOnChange }) => {
   );
 }; 
 
-export default function SectionPlaySong({ encodeId, data }) {
+export default function SectionPlaySong({ encodeId, data, streaming }) {
+
   const navigate = useNavigate();  
 
   const { audioRef, dataPlaySong, setDataPlaySong, handlePlayAndPauseSong, handleNextAndPreviousSong, handleEnded} = useContext(PlaySongContext); 
@@ -78,6 +79,9 @@ export default function SectionPlaySong({ encodeId, data }) {
   const handleClickRandom = () => {
     setDataPlaySong((pre) => ({ ...pre, isRandom: pre.isRandom }));
   };
+
+  if(streaming.msg !== "Success") return <div className="h-20 bg-red-400 shadow-md rounded-2xl flex justify-center items-center text-white">{streaming.msg}</div>
+
 
   return (
     <div className="space-y-5">

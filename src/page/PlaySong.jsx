@@ -21,13 +21,14 @@ export default function PlaySong() {
     lyrics,
     like,
     listen,
-    total_comment
+    total_comment,
+    streaming
   } = data.data;
 
   return (
     <div className="space-y-5 h-screen scrollbar-hide">
       <SectionSongInfo thumbnail={thumbnail_medium || thumbnail} title={title} artists_names={artists_names} like={like} listen={listen} comment={total_comment} lyrics={lyrics.length ? lyrics[0].content : ""}  />
-      <SectionPlaySong encodeId={encodeId} data={data.data}/>
+      <SectionPlaySong encodeId={encodeId} data={data.data} streaming={streaming}/>
     </div>
   );
 }
