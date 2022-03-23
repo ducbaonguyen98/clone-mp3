@@ -5,7 +5,7 @@ export default function CardSection({ title, data }) {
   return (
     <div>
       <h2 className="text-lg font-bold">{title}</h2>
-      <div className="flex gap-5 overflow-x-auto py-3">
+      <div className="flex gap-5 overflow-x-auto py-3 scrollbar-hide">
         {data.map((item, index) => (
           <Card
             key={index.toString()}
