@@ -1,9 +1,10 @@
-import React, { useState, useRef, useContext, useMemo } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { remove_unicode } from "../../helpers";
+import { CurrentSongContext } from "../../contexts/CurrentSongContext";
+import { PlaySongContext } from "../../contexts/PlaySongContext";
 
-import { ListSongContext } from "../../contexts/ListSongContext";
+import { remove_unicode } from "../../helpers";
 
 const formatTimer = (number) => {
   const minutes = Math.floor(number / 60);
@@ -28,45 +29,34 @@ const InputSlider = ({ duration, valueRange, handleOnChange }) => {
       />
     </div>
   );
-};
+}; 
 
-const Audio = ({
-  audioRef,
-  handleLoadedData,
-  handleTimeUpdate,
-  handleEnded,
-  src,
-}) => (
-  <audio
-    autoPlay
-    ref={audioRef}
-    onLoadedData={handleLoadedData}
-    onTimeUpdate={handleTimeUpdate}
-    onEnded={handleEnded}
-    src={src}
-  />
-);
+export default function SectionPlaySong({ encodeId, data, streaming }) {
+  const navigate = useNavigate(); 
 
-export default function SectionPlaySong({ encodeId, streaming }) {
-  console.log("SectionPlaySong");
+  const [active, setActive] = useState(true); 
 
-  const navigate = useNavigate();
+  const { audioRef, dataPlaySong, setDataPlaySong, handleNextAndPreviousSong, handleEnded} = useContext(PlaySongContext); 
+  const { currentSong, setCurrentSong } = useContext(CurrentSongContext);
 
-  const [valueRange, setValueRange] = useState(0);
-  const [active, setActive] = useState(true);
-  const [duration, setDuration] = useState(0);
-  const [repeat, setRepeat] = useState(0);
-  const [countRepeat, setCountRepeat] = useState(0);
-  const [isRandom, setIsRandom] = useState(false);
+  useEffect(() => { 
+    if(!dataPlaySong.isEndSong) return;
 
-  const audioRef = useRef(null);
+    if(dataPlaySong.isEndSong) {
+      handleEnded("next", (title, encodeId) => navigate(`/play-song/${remove_unicode(title)}-${encodeId}`));
+    }
 
-  const { list } = useContext(ListSongContext);
+  },[dataPlaySong.isEndSong, handleEnded, navigate])
+  
+  useEffect(() => { 
+    if(!currentSong)  {
+      setCurrentSong(data);
+      return;
+    }
 
-  const indexSong = useMemo(() => {
-    if (!list) return 0;
-    return list.findIndex((item) => item.encodeId === encodeId);
-  }, [encodeId, list]);
+    if(encodeId !== currentSong.id)
+      setCurrentSong(data);
+  },[encodeId, data, currentSong, setCurrentSong]) 
 
   const handleClick = () => {
     setActive((pre) => {
@@ -82,84 +72,44 @@ export default function SectionPlaySong({ encodeId, streaming }) {
 
   const handleOnChange = (e) => {
     const value = e.target.value;
-    audioRef.current.currentTime = value;
-    setValueRange(Number(value));
-  };
-
-  const handlepPeviousSong = () => {
-    const { title, encodeId } = list[indexSong - 1];
-    navigate(`/play-song/${remove_unicode(title)}-${encodeId}`, {
-      replace: true,
-    });
-  };
-
-  const handleNextSong = () => {
-    const index = isRandom ? Math.floor(Math.random() * 100) : indexSong + 1;
-    const { title, encodeId } = list[index];
-    navigate(`/play-song/${remove_unicode(title)}-${encodeId}`, {
-      replace: true,
-    });
-  };
-
-  const handleLoadedData = () => {
-    setActive(true);
-    setValueRange(0);
-    setDuration(audioRef.current.duration);
-  };
-
-  const handleTimeUpdate = () => {
-    setValueRange(Number(audioRef.current.currentTime));
-  };
-
-  const handleEnded = () => {
-    if (repeat === 0 || (repeat === 1 && countRepeat === 1)) {
-      setCountRepeat(0);
-      handleNextSong();
-      return;
-    }
-
-    audioRef.current.load();
-    setCountRepeat(1);
+    audioRef.current.currentTime = value; 
   };
 
   const handleClickRepeat = () => {
-    setRepeat((pre) => {
-      if (pre === 2) {
-        return 0;
+
+    setDataPlaySong((pre) => {
+      const temp = { ...pre };
+      if (temp.repeat === 2) {
+        temp.repeat = 0; 
+      } else {
+        temp.repeat += 1;
       }
 
-      return ++pre;
-    });
+      return temp;
+    }); 
   };
 
   const handleClickRandom = () => {
-    setIsRandom(!isRandom);
+    setDataPlaySong((pre) => ({ ...pre, isRandom: pre.isRandom }));
   };
 
   return (
     <div className="space-y-5">
       <InputSlider
-        duration={duration}
-        valueRange={valueRange}
+        duration={dataPlaySong.duration}
+        valueRange={dataPlaySong.valueRange}
         handleOnChange={handleOnChange}
-      />
-      <Audio
-        src={streaming.default["128"]}
-        audioRef={audioRef}
-        handleLoadedData={handleLoadedData}
-        handleTimeUpdate={handleTimeUpdate}
-        handleEnded={handleEnded}
       />
       <div className="flex justify-between items-center">
         <div onClick={handleClickRandom} className="cursor-pointer">
           <i
             className={`fas fa-random text-xl ${
-              isRandom ? "text-[#3D58FF]" : "text-neutral-500"
+              dataPlaySong.isRandom ? "text-[#3D58FF]" : "text-neutral-500"
             }`}
           ></i>
         </div>
         <div
-          onClick={handlepPeviousSong}
+          onClick={() => handleNextAndPreviousSong("previous", (title, encodeId) => navigate(`/play-song/${remove_unicode(title)}-${encodeId}`))}
           className="cursor-pointer bg-[#E4E6F1] text-[#3D58FF] h-10 w-10 rounded-full flex justify-center items-center text-xl"
         >
           <i className="fas fa-caret-left"></i>
@@ -173,7 +123,7 @@ export default function SectionPlaySong({ encodeId, streaming }) {
           )}
         </div>
         <div
-          onClick={handleNextSong}
+          onClick={() => handleNextAndPreviousSong("next", (title, encodeId) => navigate(`/play-song/${remove_unicode(title)}-${encodeId}`))}
           className="cursor-pointer bg-[#E4E6F1] text-[#3D58FF] h-10 w-10 rounded-full flex justify-center items-center text-xl"
         >
           <i className="fas fa-caret-right"></i>
@@ -183,9 +133,9 @@ export default function SectionPlaySong({ encodeId, streaming }) {
           <i
             onClick={handleClickRepeat}
             className={`fas ${
-              repeat === 1 ? "fa-repeat-1" : "fa-repeat"
+              dataPlaySong.repeat === 1 ? "fa-repeat-1" : "fa-repeat"
             } text-xl ${
-              repeat === 1 || repeat === 2
+              dataPlaySong.repeat === 1 || dataPlaySong.repeat === 2
                 ? "text-[#3D58FF]"
                 : "text-neutral-500"
             }`}

@@ -4,15 +4,15 @@ import { useListSong } from "../hooks/api";
 export const ListSongContext = createContext();
 
 const ListSongContextProvider = ({ children }) => {
-  const [list, setList] = useState(null);
+  const [listSong, setListSong] = useState(null);
   const { data } = useListSong("ZWZB969E");
 
   useEffect(() => {
-    if (data) setList(data.data.song.items);
+    if (data) setListSong(data.data.song.items);
   }, [data]);
 
   return (
-    <ListSongContext.Provider value={{ list, setList }}>
+    <ListSongContext.Provider value={{ listSong, setListSong }}>
       {children}
     </ListSongContext.Provider>
   );

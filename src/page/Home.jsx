@@ -4,12 +4,13 @@ import CardSection from "../components/HomePage/CardSection";
 import { useTop100 } from "../hooks/api";
 
 function Home() {
+  console.log("HomePapge render")
   const { data } = useTop100();
 
   if (!data) return <>loading...</>;
 
   return (
-    <div className="max-w-md m-auto p-3 space-y-10">
+    <div className="space-y-10">
       <Header />
       <div className="space-y-5">
         {data.data.map((item, index) => (

@@ -7,6 +7,7 @@ import SectionPlaySong from "../components/PlaySongPage/SectionPlaySong";
 
 
 export default function PlaySong() {
+  console.log("PlaySong render");
   const { slug } = useParams();
   const encodeId = slug.split("-").pop();
   const { data } = useSong(encodeId);
@@ -26,10 +27,10 @@ export default function PlaySong() {
   } = data.data;
 
   return (
-    <div className="max-w-md m-auto p-5 space-y-5 h-screen scrollbar-hide">
+    <div className="space-y-5 h-screen scrollbar-hide">
       <Header title={title} />
       <SectionSongInfo thumbnail={thumbnail_medium || thumbnail} title={title} artists_names={artists_names} like={like} listen={listen} comment={total_comment} lyrics={lyrics[0].content}  />
-      <SectionPlaySong encodeId={encodeId} streaming={streaming}/>
+      <SectionPlaySong encodeId={encodeId} data={data.data} streaming={streaming}/>
     </div>
   );
 }

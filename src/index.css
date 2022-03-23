@@ -1,6 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+ 
+body {
+   @apply bg-white
+}
 
 .range {
     -webkit-appearance: none; /* Hides the slider so that custom slider can be made */

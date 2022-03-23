@@ -7,17 +7,19 @@ import SectionArtist from "../components/DetailPage/SectionArtist";
 import { ListSongContext } from "../contexts/ListSongContext";
 
 export default function Detail() {
+  console.log("Detail render")
+
   const { slug } = useParams();
   const { data } = useListSong(slug.split("-").pop());
 
   const [ limit, setLimit ] = useState(10); 
-  const { setList } = useContext(ListSongContext); 
+  const { setListSong } = useContext(ListSongContext); 
     
 
   useEffect(() => {
     if(data)  
-      setList(data.data.song.items);
-  },[data, setList]);
+      setListSong(data.data.song.items);
+  },[data, setListSong]);
 
   if (!data) return <>Loading...</>; 
 
@@ -35,7 +37,7 @@ export default function Detail() {
 
 
   return (
-    <div className="p-5 max-w-md m-auto space-y-5 brightness-125 bg-white">
+    <div className="space-y-5 brightness-125">
       <Header thumbnail={thumbnailM || thumbnail_medium || thumbnail} title={title} badge={genres[0].title} description={sortDescription} />
       <SectionListSong data={song.items.slice(0, limit)}/>
       <div className="text-center">
