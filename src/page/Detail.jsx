@@ -46,7 +46,7 @@ export default function Detail() {
         <meta property="og:title" content={title} />
         <meta property="og:image" content={thumbnail_medium || thumbnail} /> 
       </MetaTags>
-      <div className="space-y-5">
+      <div className="p-5 space-y-5">
         <Header
           thumbnail={thumbnailM || thumbnail_medium || thumbnail}
           title={title}
@@ -59,7 +59,7 @@ export default function Detail() {
             <button
               onClick={() => setLimit((pre) => (pre += 10))}
               type="button"
-              className="bg-white py-2.5 px-10 border border-neutral-400 font-medium rounded-full"
+              className="bg-white dark:bg-dark py-2.5 px-10 border border-secondary font-medium rounded-full"
             >
               Xem thêm
             </button>

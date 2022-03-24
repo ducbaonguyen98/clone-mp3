@@ -1,90 +1,95 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { CurrentSongContext } from "../../contexts/CurrentSongContext";
 import { PlaySongContext } from "../../contexts/PlaySongContext";
 
-import { remove_unicode } from "../../helpers";
-
-const formatTimer = (number) => {
-  const minutes = Math.floor(number / 60);
-  const seconds = Math.floor(number - minutes * 60);
-  return `${minutes}:${seconds}`;
-};
+import { remove_unicode, formatTimer } from "../../helpers";
 
 const InputSlider = ({ duration, valueRange, handleOnChange }) => {
-  return (
-    <div className="space-y-2">
-      <div className="flex justify-between text-sm">
-        <span className="text-[#3D58FF]">{formatTimer(duration)}</span>
-        <span className="text-neutral-500">{formatTimer(valueRange)}</span>
+  const inputRef = useRef(null); 
+  
+  return ( 
+    <div className="relative mt-3">
+      <div className="absolute bottom-1.5 space-y-1 w-full">
+        <div className="w-full flex justify-between text-sm">
+          <span className="text-info dark:text-white">{formatTimer(duration)}</span>
+          <span className="text-secondary">{formatTimer(valueRange)}</span>
+        </div>
+        <div
+          className="h-1 bg-info rounded-full"
+          style={{ width: `${valueRange * (inputRef?.current?.clientWidth / duration)}px` }}
+        ></div>
       </div>
       <input
+        ref={inputRef}
         onChange={handleOnChange}
-        className="range bg-[#E4E6F1] rounded-full"
+        className="range bg-[#E4E6F1] rounded-full z-20"
         type="range"
         defaultValue={null}
         value={valueRange}
         max={duration}
       />
-    </div>
+    </div> 
   );
-}; 
+};
 
-export default function SectionPlaySong({ encodeId, data, streaming }) {
+export default function SectionPlaySong({ encodeId, data }) {
+  const navigate = useNavigate();
 
-  const navigate = useNavigate();  
-
-  const { audioRef, dataPlaySong, setDataPlaySong, handlePlayAndPauseSong, handleNextAndPreviousSong, handleEnded} = useContext(PlaySongContext); 
+  const {
+    audioRef,
+    dataPlaySong,
+    setDataPlaySong,
+    handlePlayAndPauseSong,
+    handleNextAndPreviousSong,
+    handleEnded,
+  } = useContext(PlaySongContext);
   const { currentSong, setCurrentSong } = useContext(CurrentSongContext);
 
-  useEffect(() => { 
-    if(!dataPlaySong.isEndSong) return;
+  useEffect(() => {
+    if (!dataPlaySong.isEndSong) return;
 
-    if(dataPlaySong.isEndSong) {
-      handleEnded("next", (title, encodeId) => navigate(`/play-song/${remove_unicode(title)}-${encodeId}`));
+    if (dataPlaySong.isEndSong) {
+      handleEnded("next", (title, encodeId) =>
+        navigate(`/play-song/${remove_unicode(title)}-${encodeId}`)
+      );
     }
+  }, [dataPlaySong.isEndSong, handleEnded, navigate]);
 
-  },[dataPlaySong.isEndSong, handleEnded, navigate])
-  
-  useEffect(() => { 
-    if(!currentSong)  {
+  useEffect(() => {
+    if (!currentSong) {
       setCurrentSong(data);
       return;
     }
 
-    if(encodeId !== currentSong.id)
-      setCurrentSong(data);
-  },[encodeId, data, currentSong, setCurrentSong])  
+    if (encodeId !== currentSong.id) setCurrentSong(data);
+  }, [encodeId, data, currentSong, setCurrentSong]);
 
   const handleOnChange = (e) => {
     const value = e.target.value;
-    audioRef.current.currentTime = value; 
+    audioRef.current.currentTime = value;
   };
 
   const handleClickRepeat = () => {
-
     setDataPlaySong((pre) => {
       const temp = { ...pre };
       if (temp.repeat === 2) {
-        temp.repeat = 0; 
+        temp.repeat = 0;
       } else {
         temp.repeat += 1;
       }
 
       return temp;
-    }); 
+    });
   };
 
   const handleClickRandom = () => {
-    setDataPlaySong((pre) => ({ ...pre, isRandom: pre.isRandom }));
+    setDataPlaySong((pre) => ({ ...pre, isRandom: !pre.isRandom }));
   };
 
-  if(streaming.msg !== "Success") return <div className="h-20 bg-red-400 shadow-md rounded-2xl flex justify-center items-center text-white">{streaming.msg}</div>
-
-
   return (
-    <div className="space-y-5">
+    <div className="space-y-2 px-5 py-3 border-t-2 border-neutral-200 sticky bottom-0 left-0 right-0 bg-white dark:bg-dark dark:border-dark-200 z-10">
       <InputSlider
         duration={dataPlaySong.duration}
         valueRange={dataPlaySong.valueRange}
@@ -94,27 +99,41 @@ export default function SectionPlaySong({ encodeId, data, streaming }) {
         <div onClick={handleClickRandom} className="cursor-pointer">
           <i
             className={`fas fa-random text-xl ${
-              dataPlaySong.isRandom ? "text-[#3D58FF]" : "text-neutral-500"
+              dataPlaySong.isRandom ? "text-info dark:text-white" : "text-secondary"
             }`}
           ></i>
         </div>
         <div
-          onClick={() => handleNextAndPreviousSong("previous", (title, encodeId) => navigate(`/play-song/${remove_unicode(title)}-${encodeId}`))}
-          className="cursor-pointer bg-[#E4E6F1] text-[#3D58FF] h-10 w-10 rounded-full flex justify-center items-center text-xl"
+          onClick={() =>
+            handleNextAndPreviousSong("previous", (title, encodeId) =>
+              navigate(`/play-song/${remove_unicode(title)}-${encodeId}`)
+            )
+          }
+          className="cursor-pointer bg-[#E4E6F1] dark:bg-dark-200 text-info  dark:text-white h-10 w-10 rounded-full flex justify-center items-center text-xl"
         >
           <i className="fas fa-caret-left"></i>
           <i className="fas fa-caret-left"></i>
         </div>
-        <div className="bg-[#3D58FF] h-14 w-14 rounded-full text-2xl text-white flex justify-center items-center cursor-pointer">
+        <div className="bg-info dark:bg-dark-200 h-14 w-14 rounded-full text-2xl text-white flex justify-center items-center cursor-pointer">
           {dataPlaySong.isPlay ? (
-            <i onClick={() => handlePlayAndPauseSong()} className="fas fa-pause"></i>
+            <i
+              onClick={() => handlePlayAndPauseSong()}
+              className="fas fa-pause"
+            ></i>
           ) : (
-            <i onClick={() => handlePlayAndPauseSong()} className="fas fa-play"></i>
+            <i
+              onClick={() => handlePlayAndPauseSong()}
+              className="fas fa-play"
+            ></i>
           )}
         </div>
         <div
-          onClick={() => handleNextAndPreviousSong("next", (title, encodeId) => navigate(`/play-song/${remove_unicode(title)}-${encodeId}`))}
-          className="cursor-pointer bg-[#E4E6F1] text-[#3D58FF] h-10 w-10 rounded-full flex justify-center items-center text-xl"
+          onClick={() =>
+            handleNextAndPreviousSong("next", (title, encodeId) =>
+              navigate(`/play-song/${remove_unicode(title)}-${encodeId}`)
+            )
+          }
+          className="cursor-pointer bg-[#E4E6F1] dark:bg-dark-200 text-info dark:text-white h-10 w-10 rounded-full flex justify-center items-center text-xl"
         >
           <i className="fas fa-caret-right"></i>
           <i className="fas fa-caret-right"></i>
@@ -126,8 +145,8 @@ export default function SectionPlaySong({ encodeId, data, streaming }) {
               dataPlaySong.repeat === 1 ? "fa-repeat-1" : "fa-repeat"
             } text-xl ${
               dataPlaySong.repeat === 1 || dataPlaySong.repeat === 2
-                ? "text-[#3D58FF]"
-                : "text-neutral-500"
+                ? "text-info dark:text-white"
+                : "text-secondary"
             }`}
           ></i>
         </div>

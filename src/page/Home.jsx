@@ -17,7 +17,7 @@ function Home() {
         <meta name="description" content="clone mp3" />
         <meta property="og:title" content="Hello - guys !" /> 
       </MetaTags>
-      <div className="space-y-10">
+      <div className="p-5 space-y-10">
         <div className="space-y-5">
           {data.data.map((item, index) => (
             <CardSection

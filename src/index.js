@@ -7,6 +7,7 @@ import axiosClient from './api-client/axiosClient';
 import ListSongContextProvider from "./contexts/ListSongContext";
 import CurrentSongContextProvider from "./contexts/CurrentSongContext";
 import PlaySongContextProvider from "./contexts/PlaySongContext";
+import ThemeContextProvider from "./contexts/ThemeContext";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -14,7 +15,9 @@ ReactDOM.render(
       <ListSongContextProvider>
         <CurrentSongContextProvider>
           <PlaySongContextProvider>
-            <App />
+            <ThemeContextProvider>
+              <App />
+            </ThemeContextProvider>
           </PlaySongContextProvider>
         </CurrentSongContextProvider>
       </ListSongContextProvider>

@@ -15,8 +15,8 @@ const InputSlider = ({ duration, valueRange, handleOnChange }) => {
   return (
     <div className="space-y-2">
       <div className="flex justify-between text-sm">
-        <span className="text-[#3D58FF]">{formatTimer(duration)}</span>
-        <span className="text-neutral-500">{formatTimer(valueRange)}</span>
+        <span className="text-info">{formatTimer(duration)}</span>
+        <span className="text-secondary">{formatTimer(valueRange)}</span>
       </div>
       <input
         onChange={handleOnChange}
@@ -154,18 +154,18 @@ export default function SectionPlaySong({ encodeId, streaming }) {
         <div onClick={handleClickRandom} className="cursor-pointer">
           <i
             className={`fas fa-random text-xl ${
-              isRandom ? "text-[#3D58FF]" : "text-neutral-500"
+              isRandom ? "text-info" : "text-secondary"
             }`}
           ></i>
         </div>
         <div
           onClick={handlepPeviousSong}
-          className="cursor-pointer bg-[#E4E6F1] text-[#3D58FF] h-10 w-10 rounded-full flex justify-center items-center text-xl"
+          className="cursor-pointer bg-[#E4E6F1] text-info h-10 w-10 rounded-full flex justify-center items-center text-xl"
         >
           <i className="fas fa-caret-left"></i>
           <i className="fas fa-caret-left"></i>
         </div>
-        <div className="bg-[#3D58FF] h-14 w-14 rounded-full text-2xl text-white flex justify-center items-center cursor-pointer">
+        <div className="bg-info h-14 w-14 rounded-full text-2xl text-white flex justify-center items-center cursor-pointer">
           {active ? (
             <i onClick={handleClick} className="fas fa-pause"></i>
           ) : (
@@ -174,7 +174,7 @@ export default function SectionPlaySong({ encodeId, streaming }) {
         </div>
         <div
           onClick={handleNextSong}
-          className="cursor-pointer bg-[#E4E6F1] text-[#3D58FF] h-10 w-10 rounded-full flex justify-center items-center text-xl"
+          className="cursor-pointer bg-[#E4E6F1] text-info h-10 w-10 rounded-full flex justify-center items-center text-xl"
         >
           <i className="fas fa-caret-right"></i>
           <i className="fas fa-caret-right"></i>
@@ -186,8 +186,8 @@ export default function SectionPlaySong({ encodeId, streaming }) {
               repeat === 1 ? "fa-repeat-1" : "fa-repeat"
             } text-xl ${
               repeat === 1 || repeat === 2
-                ? "text-[#3D58FF]"
-                : "text-neutral-500"
+                ? "text-info"
+                : "text-secondary"
             }`}
           ></i>
         </div>

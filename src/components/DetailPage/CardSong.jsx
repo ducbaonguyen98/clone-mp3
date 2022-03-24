@@ -12,7 +12,7 @@ export default function CardSong({ encodeId, title, thumbnail, artistsNames }) {
         />
         <div>
             <h2 className="font-semibold line-clamp-1">{title}</h2>
-            <h3 className="text-neutral-500 text-sm line-clamp-1">
+            <h3 className="text-secondary text-sm line-clamp-1">
             {artistsNames}
             </h3>
         </div> 

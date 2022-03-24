@@ -26,6 +26,15 @@ export default function PlaySong() {
     streaming,
   } = data.data;
 
+  if (streaming.msg !== "Success")
+    return (
+      <div className="h-screen m-5"> 
+        <div className="p-5 h-20 bg-red-400 shadow-md rounded-2xl">
+          <h3 className="text-white">{streaming.msg}</h3>
+        </div>
+      </div>
+    );
+
   return (
     <>
       <MetaTags>
@@ -36,7 +45,7 @@ export default function PlaySong() {
         <meta property="og:title" content={`${title} - ${artists_names}`} />
         <meta property="og:image" content={thumbnail_medium || thumbnail} /> 
       </MetaTags>
-      <div className="space-y-5 h-screen scrollbar-hide">
+      <div className="">
         <SectionSongInfo
           thumbnail={thumbnail_medium || thumbnail}
           title={title}
@@ -44,12 +53,11 @@ export default function PlaySong() {
           like={like}
           listen={listen}
           comment={total_comment}
-          lyrics={lyrics.length ? lyrics[0].content : ""}
+          lyrics={lyrics?.length ? lyrics[0].content : ""}
         />
         <SectionPlaySong
           encodeId={encodeId}
-          data={data.data}
-          streaming={streaming}
+          data={data.data} 
         />
       </div>
     </>
