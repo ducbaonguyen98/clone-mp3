@@ -34,7 +34,7 @@ const InputSlider = ({ duration, valueRange, handleOnChange }) => {
   );
 };
 
-export default function SectionPlaySong({ encodeId, data }) {
+export const SectionPlaySong = ({ encodeId, data }) => {
   const navigate = useNavigate();
 
   const {

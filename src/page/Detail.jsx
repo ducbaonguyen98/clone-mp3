@@ -3,9 +3,7 @@ import { useParams } from "react-router-dom";
 import MetaTags from "react-meta-tags";
 
 import { useListSong } from "../hooks/api";
-import Header from "../components/DetailPage/Header";
-import SectionListSong from "../components/DetailPage/SectionListSong";
-import SectionArtist from "../components/DetailPage/SectionArtist";
+import { Header, SectionListSong, SectionArtist } from "../components/DetailPage"; 
 import { ListSongContext } from "../contexts/ListSongContext";
 import Loading from "../components/Loading";
 

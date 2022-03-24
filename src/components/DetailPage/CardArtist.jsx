@@ -1,7 +1,7 @@
 import React from "react";
 import numeral from "numeral";
 
-export default function CardArtist({ name, thumbnail, totalFollow }) {
+export const CardArtist = ({ name, thumbnail, totalFollow }) => {
   return (
     <div className="shrink-0 text-center">
       <img src={thumbnail} alt={name} className="w-40 h-40 rounded-full" />

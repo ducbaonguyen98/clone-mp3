@@ -3,8 +3,7 @@ import { useParams } from "react-router-dom";
 import MetaTags from "react-meta-tags";
 
 import { useSong } from "../hooks/api";
-import SectionSongInfo from "../components/PlaySongPage/SectionSongInfo";
-import SectionPlaySong from "../components/PlaySongPage/SectionPlaySong";
+import { SectionSongInfo, SectionPlaySong } from "../components/PlaySongPage"; 
 import Loading from "../components/Loading";
 
 export default function PlaySong() {

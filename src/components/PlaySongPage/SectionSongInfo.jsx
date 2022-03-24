@@ -1,7 +1,7 @@
 import React from "react";
 import numeral from "numeral";
 
-const SectionSongInfo = ({ thumbnail, title, artists_names, like, listen, comment, lyrics }) => {
+export const SectionSongInfo =  React.memo(({ thumbnail, title, artists_names, like, listen, comment, lyrics }) => {
 
   return (
     <div className="p-5 space-y-3">
@@ -29,5 +29,4 @@ const SectionSongInfo = ({ thumbnail, title, artists_names, like, listen, commen
       </div>
     </div>
   );
-}
-export default React.memo(SectionSongInfo);
+});

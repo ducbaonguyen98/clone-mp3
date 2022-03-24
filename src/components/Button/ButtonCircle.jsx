@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function ButtonCircle({ children, onClick }) {
+export const ButtonCircle = ({ children, onClick }) => {
   return (
     <button
       onClick={onClick}
@@ -10,4 +10,4 @@ export default function ButtonCircle({ children, onClick }) {
       {children}
     </button>
   );
-}
+};

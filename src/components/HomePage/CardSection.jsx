@@ -1,7 +1,7 @@
 import React from "react";
-import Card from "./Card";
+import { Card } from ".";
 
-export default function CardSection({ title, data }) {
+export const CardSection = ({ title, data }) => {
   return (
     <div>
       <h2 className="text-lg font-bold">{title}</h2>

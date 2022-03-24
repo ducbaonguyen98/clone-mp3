@@ -1,6 +1,6 @@
 import React from "react";
-import CardArtist from "./CardArtist"; 
-export default function SectionArtist({ data }) {
+import { CardArtist } from "."; 
+export const SectionArtist = ({ data }) => {
   return (
     <div className="space-y-5">
       <h2 className="text-xl font-bold">Nghệ sĩ đóng góp</h2>

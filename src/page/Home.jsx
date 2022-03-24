@@ -1,7 +1,7 @@
 import React from "react";
 import MetaTags from "react-meta-tags";
 
-import CardSection from "../components/HomePage/CardSection";
+import { CardSection } from "../components/HomePage";
 import Loading from "../components/Loading";
 import { useTop100 } from "../hooks/api";
 

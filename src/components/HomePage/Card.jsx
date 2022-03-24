@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { remove_unicode } from "../../helpers/index";
 
 
-export default function Card({ encodeId, title, link, artists, thumbnail }) {
+export const Card = ({ encodeId, title, link, artists, thumbnail }) => {
   return (
     <div className="rounded-2xl shadow w-36 shrink-0 dark:bg-dark-200">
       <Link to={`/song/${remove_unicode(title)}-${encodeId}`}>

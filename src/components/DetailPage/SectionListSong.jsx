@@ -1,6 +1,6 @@
 import React from "react";
-import CardSong from "./CardSong";
-export default function SectionListSong({ data }) { 
+import { CardSong } from ".";
+export const SectionListSong = ({ data }) => { 
   return (
     <div className="space-y-10">
       <div className="space-y-5">

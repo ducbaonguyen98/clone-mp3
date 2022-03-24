@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ListSongContext } from "../../contexts/ListSongContext";
 import { remove_unicode } from "../../helpers";
 
-export default function Header({ thumbnail, title, description, badge }) {
+export const Header = ({ thumbnail, title, description, badge }) => {
   const navigate = useNavigate();
   const { listSong } = useContext(ListSongContext); 
 

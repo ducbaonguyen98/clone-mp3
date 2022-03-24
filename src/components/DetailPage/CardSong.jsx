@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from "react-router-dom";
 import { remove_unicode } from "../../helpers"; 
 
-export default function CardSong({ encodeId, title, thumbnail, artistsNames }) {
+export const CardSong = ({ encodeId, title, thumbnail, artistsNames }) => {
   return (
     <Link to={`/play-song/${remove_unicode(title)}-${encodeId}`} className="flex items-center gap-2">
         <img

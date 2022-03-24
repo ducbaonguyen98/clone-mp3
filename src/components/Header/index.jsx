@@ -5,8 +5,8 @@ import useSWR from "swr";
 import { ListSongContext } from "../../contexts/ListSongContext";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { useDebounce } from "../../hooks/helpers";
-import CardSong from "../DetailPage/CardSong";
-import ButtonCircle from "../Button/ButtonCircle";
+import { CardSong } from "../DetailPage";
+import { ButtonCircle } from "../Button";
 
 const InputSearch = ({ value, handleOnChange }) => (
   <div className="relative">

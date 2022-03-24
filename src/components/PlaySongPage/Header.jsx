@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { ListSongContext } from "../../contexts/ListSongContext";
 
-export default function Header({ title }) {
+export const Header = ({ title }) => {
   const navigate = useNavigate();
   const { pathListSong } = useContext(ListSongContext);
   return (
